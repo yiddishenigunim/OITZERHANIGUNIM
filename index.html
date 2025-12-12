@@ -1210,8 +1210,9 @@
         async function fetchSongs() {
             try {
                 console.log('Fetching songs with full details...');
+                const data = await response.json();
                const response = await fetch(
-    `https://coda-proxy.yiddishenigunim.workers.dev/?endpoint=docs/${DOC_ID}/tables/${TABLE_ID}/rows&valueFormat=rich`
+  `https://coda-proxy.yiddishenigunim.workers.dev/?endpoint=${encodeURIComponent(`docs/${DOC_ID}/tables/${TABLE_ID}/rows?valueFormat=rich`)}`
 );
 
 
@@ -1224,8 +1225,8 @@
                 console.log('Fetched data:', data);
 
                 // Get column info to map column IDs to names
-                const columnsResponse = await fetch(
-    `https://coda-proxy.yiddishenigunim.workers.dev/?endpoint=docs/${DOC_ID}/tables/${TABLE_ID}/columns`
+               const columnsResponse = await fetch(
+  `https://coda-proxy.yiddishenigunim.workers.dev/?endpoint=${encodeURIComponent(`docs/${DOC_ID}/tables/${TABLE_ID}/columns`)}`
 );
 
 
