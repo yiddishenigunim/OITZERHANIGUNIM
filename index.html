@@ -1,3 +1,117 @@
+
+Shortcuts
+Home
+Mentions
+star
+Starred
+Direct messages
+
+Leibish Stauber
+
+מ.מ. ב.
+
+J. P. Weissman
+
+ATIKIN NEGINA
+
+אמג הפקות
+
+‫אהרן אשר יעקב הערשקאוויטש‬‎
+
+יואל הלוי ראטה
+
+אייזיק טייטלבוים
+
+Japin Ivelt
+
+Satmar Choir
+
+Brinem Ivelt
+Spaces
+🎹
+אוצר הניגונים פראיעקט
+Space
+⚙️
+Oitzerhanigunim.org
+Space
+Apps
+No apps yet
+Explore apps
+You
+,
+Yesterday 8:40 PM
+,
+0:49
+,Yesterday 8:40 PM,
+You
+,
+Yesterday 11:04 PM
+,
+image.png
+,Yesterday 11:04 PM,
+image.png
+,Yesterday 11:04 PM,
+Leibish Stauber
+,
+Yesterday 11:19 PM
+,
+עפעס האסטו געטון?
+,Yesterday 11:19 PM,
+כ'באקום אויך דעם עראר
+,Yesterday 11:19 PM,
+You
+,
+Yesterday 11:21 PM
+,
+ניין כאב נישט געטאטשט!...
+,Yesterday 11:21 PM,
+Leibish Stauber
+,
+Yesterday 11:21 PM
+,
+אקעי. נישט ביי אלע פיילס
+,Yesterday 11:21 PM,
+ס'ארבעט יא
+,Yesterday 11:21 PM,
+Leibish Stauber
+,
+Yesterday 11:29 PM
+,
+ביי די וואס ליגט אויף אוצר הניגונים באקום איך עס
+,Yesterday 11:29 PM,
+זעט אויס יענע דריידל ארבעט זיך נישט אויס
+,Yesterday 11:29 PM,
+Today
+Leibish Stauber
+,
+12:21 AM
+,
+You've hit your session limit ∙ Resets at 4:00 AM
+oitzer_hanigunim (11).html
+,12:21 AM,
+Leibish Stauber
+,
+23 min
+,
+פיינעל!!!
+playlist_updated (15).html
+,23 min,
+👏👏
+,23 min,
+Leibish Stauber
+,
+22 min
+,
+איך ווייס נישט אויב איך קען אים גלייבן, אבער אזוי זאגט ער...
+Message read by Leibish Stauber
+
+, 4 replies, Last Reply: 20 min
+,22 min,
+4 replies
+, Last Reply
+20 min
+History is on
+
 <!DOCTYPE html>
 <html lang="yi" dir="rtl">
 <head>
@@ -264,6 +378,41 @@
 
         .playlist-header {
             margin-bottom: 15px;
+            text-align: left;
+            direction: rtl;
+        }
+
+        .song-count {
+            display: inline-block;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .refresh-btn:hover {
+            background: linear-gradient(135deg, #6a1b9a 0%, #4a148c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(142, 36, 170, 0.4);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
         }
 
         .playlist-section {
@@ -322,7 +471,7 @@
 
         .search-box-wrapper {
             position: relative;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .search-box {
@@ -350,6 +499,35 @@
             font-size: 1.2em;
             pointer-events: none;
             opacity: 0.5;
+        }
+
+        .audio-filter-toggle {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            border-radius: 10px;
+            border: 2px solid #ba68c8;
+        }
+
+        .audio-filter-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            color: #6a1b9a;
+        }
+
+        .audio-filter-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #8e24aa;
+        }
+
+        .audio-filter-label span {
+            flex: 1;
         }
 
         .filters-grid {
@@ -596,6 +774,25 @@
             color: white;
             border-color: #ce93d8;
             box-shadow: 0 2px 8px rgba(206, 147, 216, 0.4);
+        }
+
+        .song-item.no-audio {
+            opacity: 0.5;
+            background: #f0f0f0;
+        }
+
+        .song-item.no-audio:hover {
+            opacity: 0.7;
+            background: #e8e8e8;
+        }
+
+        .audio-indicator {
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .song-item.active .audio-indicator {
+            filter: brightness(0) invert(1);
         }
 
         .song-number {
@@ -912,7 +1109,7 @@
 
             .sidebar {
                 width: 100%;
-                margin-top: 0;
+                margin-top: 30px;
                 margin-bottom: 20px;
                 position: static;
                 padding-bottom: 20px;
@@ -1005,7 +1202,7 @@
     <div class="container">
         <div class="header">
             <h1>אוצר הניגונים</h1>
-            <p>ניגונים פלעיליסט (בעטא)</p>
+            <p>ניגונים פלעיליסט</p>
         </div>
 
         <div class="player-section">
@@ -1045,6 +1242,18 @@
         <div class="main-content">
             <aside class="sidebar">
                 <div class="filters-section">
+                    <div class="search-box-wrapper">
+                        <input type="text" id="searchBox" class="search-box" placeholder="זוכט א ניגון..." oninput="searchSongs()">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    
+                    <div class="audio-filter-toggle">
+                        <label class="audio-filter-label">
+                            <input type="checkbox" id="audioOnlyFilter" onchange="applyFilters()" checked>
+                            <span id="audioFilterText">נאר ניגונים מיט אודיאו 🎵</span>
+                        </label>
+                    </div>
+                    
                     <div class="filters-title-row" onclick="toggleFiltersCollapse()" style="cursor: pointer;">
                         <div class="filters-title">
                             <span>🔍 פילטערס</span>
@@ -1053,10 +1262,6 @@
                     </div>
                     
                     <div id="filtersContent" class="filters-content collapsed">
-                        <div class="search-box-wrapper">
-                    <input type="text" id="searchBox" class="search-box" placeholder="זוכט א ניגון..." oninput="searchSongs()">
-                    <span class="search-icon">🔍</span>
-                </div>
                 
                 <div class="filters-grid">
                     <div class="filter-group">
@@ -1142,6 +1347,10 @@
                 <button class="clear-filters-btn" id="clearFiltersBtn" onclick="clearAllFilters()" style="display: none;">
                     ✖ נעם אראפ אלע פילטערס
                 </button>
+                
+                <button class="refresh-btn" id="refreshBtn" onclick="refreshData()" title="ריפרעש ניגונים פון Coda">
+                    🔄 ריפרעש דאטע
+                </button>
                     </div>
             </div>
             </aside>
@@ -1184,10 +1393,10 @@
     </div>
 
     <script>
-        // Use Cloudflare Worker proxy instead of direct API key
-        const WORKER_URL = 'https://coda-proxy.yiddishenigunim.workers.dev/api/';
-        const DOC_ID = 'NVFVdwhpXT';
-        const TABLE_ID = 'grid-YycmDjJ8pS'; // The "songs" table
+        // Use Cloudflare Worker proxy with custom domain
+        const WORKER_URL = 'https://api.oitzerhanigunim.org/api/';
+        const DOC_ID = '6QcJRx7e13';
+        const TABLE_ID = 'grid-YycmDjJ8pS'; // The main songs table
         
         let songs = [];
         let allSongs = []; // Keep original unfiltered list
@@ -1211,15 +1420,73 @@
 
         async function fetchSongs() {
             try {
-                console.log('Fetching songs with full details...');
-                const response = await fetch(`${WORKER_URL}docs/${DOC_ID}/tables/${TABLE_ID}/rows?valueFormat=rich`);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                // Check cache first
+                const CACHE_KEY = 'nigunimCache_v1';
+                const CACHE_TIMESTAMP_KEY = 'nigunimCacheTime_v1';
+                const CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
+                
+                const cachedRaw = localStorage.getItem(CACHE_KEY);
+                const cacheTime = localStorage.getItem(CACHE_TIMESTAMP_KEY);
+                const now = Date.now();
+                
+                // Use cache if valid  
+                if (cachedRaw && cacheTime && (now - parseInt(cacheTime)) < CACHE_DURATION) {
+                    console.log('⚡ Loading from cache...');
+                    document.getElementById('loadingSpinner').querySelector('p').textContent = 'לאָדינג פון קעש... ⚡';
+                    
+                    const cached = JSON.parse(cachedRaw);
+                    songs = cached.songs;
+                    allSongs = cached.allSongs;
+                    
+                    populateFilters();
+                    applyFilters(); // Apply default filters (audio-only is checked)
+                    displayPlaylist();
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    // Load first song with audio
+                    if (songs.length > 0) {
+                        const firstWithAudio = songs.findIndex(song => song.audioUrl && song.audioUrl.startsWith('http'));
+                        if (firstWithAudio !== -1) {
+                            loadSong(firstWithAudio);
+                        }
+                    }
+                    
+                    console.log('✓ Loaded from cache instantly!');
+                    return;
                 }
+                
+                console.log('Fetching songs with full details...');
+                document.getElementById('loadingSpinner').querySelector('p').textContent = 'לאָדינג ניגונים... (דאס קען נעמען א מינוט)';
+                
+                // Fetch all rows with pagination
+                let allItems = [];
+                let pageToken = null;
+                let pageNum = 1;
+                
+                do {
+                    const url = pageToken 
+                        ? `${WORKER_URL}docs/${DOC_ID}/tables/${TABLE_ID}/rows?valueFormat=rich&pageToken=${pageToken}`
+                        : `${WORKER_URL}docs/${DOC_ID}/tables/${TABLE_ID}/rows?valueFormat=rich&limit=500`;
+                    
+                    console.log(`Fetching page ${pageNum}...`);
+                    document.getElementById('loadingSpinner').querySelector('p').textContent = `לאָדינג זייט ${pageNum}...`;
+                    
+                    const response = await fetch(url);
 
-                const data = await response.json();
-                console.log('Fetched data:', data);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log(`Page ${pageNum}: ${data.items.length} items`);
+                    
+                    allItems = allItems.concat(data.items);
+                    pageToken = data.nextPageToken;
+                    pageNum++;
+                    
+                } while (pageToken);
+                
+                console.log(`Total fetched: ${allItems.length} songs`);
 
                 // Get column info to map column IDs to names
                 const columnsResponse = await fetch(`${WORKER_URL}docs/${DOC_ID}/tables/${TABLE_ID}/columns`);
@@ -1230,8 +1497,11 @@
                 function extractText(value) {
                     if (!value) return '';
                     if (typeof value === 'string') {
-                        // Remove backticks
-                        return value.replace(/```/g, '').trim();
+                        // Remove backticks and markdown bold/italic markers
+                        return value.replace(/```/g, '')
+                                   .replace(/\*\*/g, '')
+                                   .replace(/\*/g, '')
+                                   .trim();
                     }
                     if (Array.isArray(value)) {
                         return value.map(v => extractText(v)).filter(Boolean).join(', ');
@@ -1239,29 +1509,46 @@
                     if (typeof value === 'object') {
                         // Coda often returns {name: "text"} or {display: "text"}
                         const text = value.name || value.display || value.value || '';
-                        // Remove backticks
-                        return typeof text === 'string' ? text.replace(/```/g, '').trim() : text;
+                        // Remove backticks and markdown markers
+                        return typeof text === 'string' ? text.replace(/```/g, '')
+                                                              .replace(/\*\*/g, '')
+                                                              .replace(/\*/g, '')
+                                                              .trim() : text;
                     }
                     return '';
                 }
 
-                songs = data.items
+                songs = allItems
                     .map((item, index) => {
                         const values = item.values;
                         let audioUrl = null;
                         
-                        // Use the attachment field c-BL2nOfN1EQ
-                        const attachmentField = values['c-BL2nOfN1EQ'];
+                        // Try File column first (c-XmTlDf3xfw)
+                        const fileField = values['c-XmTlDf3xfw'];
                         
-                        if (Array.isArray(attachmentField) && attachmentField.length > 0) {
-                            // Check if it's an object with url property
-                            if (attachmentField[0].url) {
-                                audioUrl = attachmentField[0].url;
-                            } else if (typeof attachmentField[0] === 'string') {
-                                audioUrl = attachmentField[0];
+                        if (Array.isArray(fileField) && fileField.length > 0) {
+                            if (fileField[0].url) {
+                                audioUrl = fileField[0].url;
+                            } else if (typeof fileField[0] === 'string') {
+                                audioUrl = fileField[0];
                             }
-                        } else if (typeof attachmentField === 'string') {
-                            audioUrl = attachmentField;
+                        } else if (typeof fileField === 'string' && fileField) {
+                            audioUrl = fileField;
+                        }
+                        
+                        // Fallback to Attachments column if File is empty
+                        if (!audioUrl) {
+                            const attachmentField = values['c-BL2nOfN1EQ'];
+                            
+                            if (Array.isArray(attachmentField) && attachmentField.length > 0) {
+                                if (attachmentField[0].url) {
+                                    audioUrl = attachmentField[0].url;
+                                } else if (typeof attachmentField[0] === 'string') {
+                                    audioUrl = attachmentField[0];
+                                }
+                            } else if (typeof attachmentField === 'string') {
+                                audioUrl = attachmentField;
+                            }
                         }
 
                         return {
@@ -1296,10 +1583,22 @@
 
                 console.log('Processed songs:', songs.length, 'total');
                 
-                // Filter out songs without valid URLs
-                songs = songs.filter(song => song.audioUrl && song.audioUrl.startsWith('http'));
+                // Log first 3 songs to debug
+                console.log('First 3 songs before filtering:');
+                songs.slice(0, 3).forEach((song, i) => {
+                    console.log(`Song ${i + 1}:`, {
+                        name: song.name,
+                        audioUrl: song.audioUrl,
+                        hasUrl: !!song.audioUrl
+                    });
+                });
+                
+                // Mark songs with/without audio but show all
+                const songsWithAudio = songs.filter(song => song.audioUrl && song.audioUrl.startsWith('http')).length;
+                const songsWithoutAudio = songs.length - songsWithAudio;
 
-                console.log('Songs with valid URLs:', songs.length);
+                console.log(`Songs breakdown: ${songsWithAudio} with audio, ${songsWithoutAudio} without audio`);
+                console.log('Showing all songs (those without audio will be marked)');
 
                 // Store original list
                 allSongs = [...songs];
@@ -1311,14 +1610,33 @@
 
                 console.log('Final songs with URLs:', songs);
                 
+                // Cache the processed results
+                try {
+                    const cacheData = {
+                        songs: songs,
+                        allSongs: allSongs
+                    };
+                    localStorage.setItem('nigunimCache_v1', JSON.stringify(cacheData));
+                    localStorage.setItem('nigunimCacheTime_v1', Date.now().toString());
+                    console.log('✓ Data cached for next visit!');
+                } catch (e) {
+                    console.warn('Could not cache data:', e);
+                }
+                
                 // Populate filter dropdowns
                 populateFilters();
                 
+                applyFilters(); // Apply default filters (audio-only is checked)
                 displayPlaylist();
                 document.getElementById('loadingSpinner').style.display = 'none';
                 
                 if (songs.length > 0) {
-                    loadSong(0);
+                    // Find first song with audio
+                    const firstWithAudio = songs.findIndex(song => song.audioUrl && song.audioUrl.startsWith('http'));
+                    if (firstWithAudio !== -1) {
+                        loadSong(firstWithAudio);
+                    }
+                    // If no songs with audio, don't load anything
                 } else {
                     throw new Error('לא געפונען קיין ניגונים מיט גילטיגע URLs');
                 }
@@ -1346,9 +1664,14 @@
             playlist.innerHTML = currentPageSongs.map((song, pageIndex) => {
                 const globalIndex = startIndex + pageIndex;
                 const isActive = globalIndex === currentSongIndex ? 'active' : '';
+                const hasAudio = song.audioUrl && song.audioUrl.startsWith('http');
+                const audioIcon = hasAudio ? '🎵' : '⏸️';
+                const noAudioClass = hasAudio ? '' : 'no-audio';
+                
                 return `
-                    <li class="song-item ${isActive}" data-index="${globalIndex}" onclick="playSong(${globalIndex})">
+                    <li class="song-item ${isActive} ${noAudioClass}" data-index="${globalIndex}" onclick="playSong(${globalIndex})">
                         <div class="song-number">${globalIndex + 1}</div>
+                        <div class="audio-indicator" title="${hasAudio ? 'האט אודיאו' : 'קיין אודיאו'}">${audioIcon}</div>
                         <div class="song-info">
                             <div class="song-name">${song.name}</div>
                             <div class="song-details">
@@ -1383,8 +1706,22 @@
         function loadSong(index) {
             if (index < 0 || index >= songs.length) return;
             
-            currentSongIndex = index;
             const song = songs[index];
+            
+            // Skip songs without audio URL
+            if (!song.audioUrl || !song.audioUrl.startsWith('http')) {
+                console.log('Skipping song without audio:', song.name);
+                // Try next song
+                if (index < songs.length - 1) {
+                    loadSong(index + 1);
+                } else {
+                    // Reached end, try from beginning
+                    loadSong(0);
+                }
+                return;
+            }
+            
+            currentSongIndex = index;
             
             console.log('Loading song:', song.name, 'URL:', song.audioUrl);
             audioPlayer.src = song.audioUrl;
@@ -1545,6 +1882,15 @@
         }
 
         function playSong(index) {
+            const song = songs[index];
+            
+            // If song doesn't have audio, show details instead
+            if (!song.audioUrl || !song.audioUrl.startsWith('http')) {
+                console.log('No audio for:', song.name, '- showing details instead');
+                showSongDetails(index);
+                return;
+            }
+            
             loadSong(index);
             audioPlayer.play();
         }
@@ -1746,8 +2092,16 @@
             // Get search term
             const searchTerm = document.getElementById('searchBox') ? document.getElementById('searchBox').value.toLowerCase() : '';
             
+            // Get audio-only filter
+            const audioOnly = document.getElementById('audioOnlyFilter') ? document.getElementById('audioOnlyFilter').checked : false;
+            
             // Filter songs
             songs = allSongs.filter(song => {
+                // Check audio-only filter first
+                if (audioOnly && (!song.audioUrl || !song.audioUrl.startsWith('http'))) {
+                    return false;
+                }
+                
                 // Check search term - search in ALL fields
                 if (searchTerm) {
                     const searchableText = [
@@ -1834,10 +2188,25 @@
                 return a.name.localeCompare(b.name, 'he');
             });
 
-            // Reset to first page
+            // Update audio filter text
+            const audioFilterText = document.getElementById('audioFilterText');
+            if (audioFilterText) {
+                if (audioOnly) {
+                    audioFilterText.textContent = 'נאר ניגונים מיט אודיאו 🎵';
+                } else {
+                    const withAudio = allSongs.filter(s => s.audioUrl && s.audioUrl.startsWith('http')).length;
+                    const withoutAudio = allSongs.length - withAudio;
+                    audioFilterText.textContent = `אלע ניגונים (מיט און אן אודיאו)`;
+                }
+            }
+
+            // Reset to first page and clear current song
             currentPage = 1;
+            currentSongIndex = -1; // Clear selection when filters change
             displayPlaylist();
             updateActiveFiltersDisplay();
+            
+            // Don't auto-load a song when filters change - let user choose
         }
 
         function updateActiveFiltersDisplay() {
@@ -1901,6 +2270,17 @@
             applyFilters();
         }
 
+        function refreshData() {
+            if (confirm('ריפרעשן אלע ניגונים פון Coda?\n\nדאס וועט קלירן די קעש און לאדן פריש דאטע.')) {
+                // Clear cache
+                localStorage.removeItem('nigunimCache_v1');
+                localStorage.removeItem('nigunimCacheTime_v1');
+                
+                // Reload page
+                window.location.reload();
+            }
+        }
+
         function clearAllFilters() {
             // Reset all filters
             activeFilters = {
@@ -1955,3 +2335,7 @@
     </script>
 </body>
 </html>
+apps-fileview.texmex_20251203.04_p0
+playlist_updated (15).html
+Displaying playlist_updated (15).html.
+Leibish is typing 
