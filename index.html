@@ -53,6 +53,18 @@
             color: #f3e5f5;
         }
 
+        .beta-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #6a1b9a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
         .player-section {
             padding: 15px 30px 10px 30px;
             background: #f8f9fa;
@@ -1087,8 +1099,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>אוצר הניגונים</h1>
-            <p>ניגונים פלעיליסט</p>
+            <h1>אוצר הניגונים פלעיליסט</h1>
+            <p><span class="beta-badge">BETA</span></p>
         </div>
 
         <div class="player-section">
@@ -1329,13 +1341,7 @@
                     displayPlaylist();
                     document.getElementById('loadingSpinner').style.display = 'none';
                     
-                    // Load first song with audio
-                    if (songs.length > 0) {
-                        const firstWithAudio = songs.findIndex(song => song.audioUrl && song.audioUrl.startsWith('http'));
-                        if (firstWithAudio !== -1) {
-                            loadSong(firstWithAudio);
-                        }
-                    }
+                    // Don't auto-load - let user click play
                     
                     console.log('✓ Loaded from cache instantly!');
                     return;
@@ -1518,11 +1524,7 @@
                 
                 if (songs.length > 0) {
                     // Find first song with audio
-                    const firstWithAudio = songs.findIndex(song => song.audioUrl && song.audioUrl.startsWith('http'));
-                    if (firstWithAudio !== -1) {
-                        loadSong(firstWithAudio);
-                    }
-                    // If no songs with audio, don't load anything
+                    // Don't auto-load - let user click play when ready
                 } else {
                     throw new Error('לא געפונען קיין ניגונים מיט גילטיגע URLs');
                 }
@@ -2162,8 +2164,12 @@
                 localStorage.removeItem('nigunimCache_v1');
                 localStorage.removeItem('nigunimCacheTime_v1');
                 
-                // Reload page
-                window.location.reload();
+                // Show loading spinner
+                document.getElementById('loadingSpinner').style.display = 'block';
+                document.getElementById('playlist').innerHTML = '';
+                
+                // Reload data manually
+                fetchSongs();
             }
         }
 
