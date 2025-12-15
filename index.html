@@ -2159,18 +2159,39 @@
         }
 
         function refreshData() {
-            if (confirm('ריפרעשן אלע ניגונים פון Coda?\n\nדאס וועט קלירן די קעש און לאדן פריש דאטע.')) {
-                // Clear cache
-                localStorage.removeItem('nigunimCache_v1');
-                localStorage.removeItem('nigunimCacheTime_v1');
-                
-                // Show loading spinner
-                document.getElementById('loadingSpinner').style.display = 'block';
-                document.getElementById('playlist').innerHTML = '';
-                
-                // Reload data manually
-                fetchSongs();
-            }
+            // Show confirmation in modal
+            document.getElementById('modalTitle').textContent = 'ריפרעש דאטא';
+            document.getElementById('modalBody').innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <p style="font-size: 1.1em; margin-bottom: 20px;">ווילט איר ריפרעשן אלע ניגונים פון Coda?</p>
+                    <p style="color: #6c757d; margin-bottom: 30px;">דאס וועט קליערן די קעש און לאודן פריש דאטא.</p>
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <button onclick="confirmRefresh()" style="background: #8e24aa; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer;">
+                            יא, ריפרעש
+                        </button>
+                        <button onclick="closeModal()" style="background: #6c757d; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer;">
+                            צוריק
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('songModal').style.display = 'block';
+        }
+        
+        function confirmRefresh() {
+            // Clear cache
+            localStorage.removeItem('nigunimCache_v1');
+            localStorage.removeItem('nigunimCacheTime_v1');
+            
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('playlist').innerHTML = '';
+            
+            // Close modal
+            closeModal();
+            
+            // Reload data manually
+            fetchSongs();
         }
 
         function clearAllFilters() {
