@@ -407,6 +407,41 @@
             border: 2px solid #ba68c8;
         }
 
+        .collections-dropdown-section {
+            margin-bottom: 15px;
+        }
+
+        .collections-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #8e24aa;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            color: #6a1b9a;
+            cursor: pointer;
+            transition: all 0.3s;
+            direction: rtl;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .collections-select:focus {
+            outline: none;
+            border-color: #6a1b9a;
+            box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.2);
+        }
+
+        .collections-select option {
+            background: white;
+            color: #333;
+            padding: 10px;
+            white-space: normal;
+            overflow: visible;
+        }
+
         .audio-filter-label {
             display: flex;
             align-items: center;
@@ -821,6 +856,35 @@
             box-shadow: 0 1px 3px rgba(142, 36, 170, 0.15);
         }
 
+        .upload-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+        }
+
+        .upload-btn:hover {
+            background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: translateY(0);
+        }
+
         .song-item.active .info-btn-icon {
             background: rgba(255, 255, 255, 0.2);
             color: white;
@@ -1039,9 +1103,8 @@
                 gap: 10px;
             }
 
-            .filter-group:last-child {
-                grid-column: 1 / -1; /* Collections takes full width */
-            }
+            /* Scale and Ritem should be in same row (items 6 and 7) */
+            /* Collections dropdown is not a filter-group, so we don't need last-child rule */
 
             .header h1 {
                 font-size: 2em;
@@ -1160,6 +1223,14 @@
                     </div>
                     
                     <div id="filtersContent" class="filters-content collapsed">
+                    
+                    <div class="collections-dropdown-section">
+                        <select id="collectionsSelect" class="collections-select" onchange="selectCollection(this.value)">
+                            <option value="">אלע קאלעקשאנס</option>
+                            <option value="" disabled>---</option>
+                            <!-- Collections will be populated here -->
+                        </select>
+                    </div>
                 
                 <div class="filters-grid">
                     <div class="filter-group">
@@ -1227,17 +1298,6 @@
                             <div class="multi-select-dropdown" id="scale-dropdown"></div>
                         </div>
                     </div>
-
-                    <div class="filter-group">
-                        <div class="multi-select-wrapper">
-                            <div class="multi-select-button" onclick="toggleDropdown('collections')">
-                                <span class="dropdown-arrow">▼</span>
-                                <span class="filter-inline-label">קאלעקשנס:</span>
-                                <span id="collections-selected">(אלע)</span>
-                            </div>
-                            <div class="multi-select-dropdown" id="collections-dropdown"></div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="active-filters" id="activeFilters"></div>
@@ -1247,7 +1307,7 @@
                 </button>
                 
                 <button class="refresh-btn" id="refreshBtn" onclick="refreshData()" title="ריפרעש ניגונים פון Coda">
-                    🔄 ריפרעש דאטע
+                    🔄 ריפרעש דאטא
                 </button>
                     </div>
             </div>
@@ -1556,6 +1616,9 @@
                 const audioIcon = hasAudio ? '🎵' : '⏸️';
                 const noAudioClass = hasAudio ? '' : 'no-audio';
                 
+                // Add upload button for songs without audio
+                const uploadBtn = hasAudio ? '' : `<a href="https://coda.io/form/_deegJpdfVC5" target="_blank" class="upload-btn" onclick="event.stopPropagation();" title="לייג צו רעקאָרדינג">+ לייג צו</a>`;
+                
                 return `
                     <li class="song-item ${isActive} ${noAudioClass}" data-index="${globalIndex}" onclick="playSong(${globalIndex})">
                         <div class="song-number">${globalIndex + 1}</div>
@@ -1567,6 +1630,7 @@
                             </div>
                             ${song.category ? `<div class="song-details" style="font-weight: bold; margin-top: 3px;">${song.category}</div>` : ''}
                         </div>
+                        ${uploadBtn}
                         <button class="info-btn-icon" onclick="showSongDetails(${globalIndex}); event.stopPropagation();" title="ווייז דעטאלן">דעטאלן</button>
                     </li>
                 `;
@@ -1751,10 +1815,12 @@
             for (let [label, value] of Object.entries(song.allDetails)) {
                 // Only show fields that have values
                 if (value && value.trim() !== '') {
+                    // Convert newlines to <br> tags
+                    const formattedValue = value.replace(/\n/g, '<br>');
                     detailsHtml += `
                         <div class="detail-row">
                             <div class="detail-label">${label}:</div>
-                            <div class="detail-value">${value}</div>
+                            <div class="detail-value">${formattedValue}</div>
                         </div>
                     `;
                 }
@@ -1866,7 +1932,31 @@
             populateMultiSelect('scale', Array.from(scales).sort((a, b) => a.localeCompare(b, 'he')));
             populateMultiSelect('ritem', Array.from(ritems).sort((a, b) => a.localeCompare(b, 'he')));
             populateMultiSelect('gezungen', Array.from(gezungens).sort((a, b) => a.localeCompare(b, 'he')));
-            populateMultiSelect('collections', Array.from(collections).sort((a, b) => a.localeCompare(b, 'he')));
+            
+            // Populate collections dropdown
+            populateCollectionsDropdown(Array.from(collections).sort((a, b) => a.localeCompare(b, 'he')));
+        }
+        
+        function populateCollectionsDropdown(collections) {
+            const select = document.getElementById('collectionsSelect');
+            // Keep the first option and separator
+            select.innerHTML = '<option value="">אלע קאלעקשאנס</option><option value="" disabled>---</option>';
+            
+            collections.forEach(collection => {
+                const option = document.createElement('option');
+                option.value = collection;
+                option.textContent = collection;
+                select.appendChild(option);
+            });
+        }
+        
+        function selectCollection(collection) {
+            if (collection) {
+                activeFilters.collections = [collection];
+            } else {
+                activeFilters.collections = [];
+            }
+            applyFilters();
         }
 
         function populateMultiSelect(filterKey, options) {
@@ -2144,17 +2234,29 @@
             // Remove from active filters
             activeFilters[filterKey] = activeFilters[filterKey].filter(v => v !== value);
             
-            // Find and uncheck the checkbox
-            const dropdown = document.getElementById(`${filterKey}-dropdown`);
-            const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => {
-                if (cb.value === value) {
-                    cb.checked = false;
+            // Handle collections dropdown separately
+            if (filterKey === 'collections') {
+                const collectionsSelect = document.getElementById('collectionsSelect');
+                if (collectionsSelect) {
+                    collectionsSelect.value = '';
                 }
-            });
+            } else {
+                // Find and uncheck the checkbox for other filters
+                const dropdown = document.getElementById(`${filterKey}-dropdown`);
+                if (dropdown) {
+                    const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        if (cb.value === value) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+            }
             
             // Update the filter
-            updateFilterDisplay(filterKey);
+            if (filterKey !== 'collections') {
+                updateFilterDisplay(filterKey);
+            }
             applyFilters();
         }
 
@@ -2211,26 +2313,31 @@
                 cb.checked = false;
             });
 
-            // Reset button texts
+            // Reset button texts (not including collections - it's a dropdown now)
             const defaultTexts = {
                 chatzer: '(אלע)',
                 verter: '(אלע)',
                 mechaber: '(אלע)',
                 scale: '(אלע)',
                 ritem: '(אלע)',
-                gezungen: '(אלע)',
-                collections: '(אלע)'
+                gezungen: '(אלע)'
             };
             
             for (let [key, text] of Object.entries(defaultTexts)) {
-                document.getElementById(`${key}-selected`).textContent = text;
+                const element = document.getElementById(`${key}-selected`);
+                if (element) {
+                    element.textContent = text;
+                }
+            }
+            
+            // Reset collections dropdown
+            const collectionsSelect = document.getElementById('collectionsSelect');
+            if (collectionsSelect) {
+                collectionsSelect.value = '';
             }
 
             // Show all songs
-            songs = [...allSongs];
-            currentPage = 1;
-            displayPlaylist();
-            updateActiveFiltersDisplay();
+            applyFilters();
         }
 
         function toggleFiltersCollapse() {
