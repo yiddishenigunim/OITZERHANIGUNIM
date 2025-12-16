@@ -873,12 +873,14 @@
             white-space: nowrap;
             text-decoration: none;
             box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+            opacity: 1 !important; /* Stay visible even in no-audio songs */
         }
 
         .upload-btn:hover {
             background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
             transform: translateY(-1px);
             box-shadow: 0 3px 8px rgba(40, 167, 69, 0.4);
+            opacity: 1 !important;
         }
 
         .upload-btn:active {
@@ -1408,12 +1410,13 @@
                 }
                 
                 console.log('Fetching songs with full details...');
-                document.getElementById('loadingSpinner').querySelector('p').textContent = 'לאָדינג ניגונים... (דאס קען נעמען א מינוט)';
+                document.getElementById('loadingSpinner').querySelector('p').textContent = 'לאָדינג ניגונים... 0%';
                 
                 // Fetch all rows with pagination
                 let allItems = [];
                 let pageToken = null;
                 let pageNum = 1;
+                const ESTIMATED_TOTAL = 1800; // Estimated total songs
                 
                 do {
                     const url = pageToken 
@@ -1421,7 +1424,11 @@
                         : `${WORKER_URL}docs/${DOC_ID}/tables/${TABLE_ID}/rows?valueFormat=rich&limit=500`;
                     
                     console.log(`Fetching page ${pageNum}...`);
-                    document.getElementById('loadingSpinner').querySelector('p').textContent = `לאָדינג זייט ${pageNum}...`;
+                    
+                    // Calculate percentage based on items fetched so far
+                    const currentCount = allItems.length;
+                    const percentage = Math.min(95, Math.round((currentCount / ESTIMATED_TOTAL) * 100));
+                    document.getElementById('loadingSpinner').querySelector('p').textContent = `לאָדינג ניגונים... ${percentage}%`;
                     
                     const response = await fetch(url);
 
@@ -1578,6 +1585,9 @@
                 // Populate filter dropdowns
                 populateFilters();
                 
+                // Show 100% before finishing
+                document.getElementById('loadingSpinner').querySelector('p').textContent = 'לאָדינג ניגונים... 100%';
+                
                 applyFilters(); // Apply default filters (audio-only is checked)
                 displayPlaylist();
                 document.getElementById('loadingSpinner').style.display = 'none';
@@ -1617,7 +1627,7 @@
                 const noAudioClass = hasAudio ? '' : 'no-audio';
                 
                 // Add upload button for songs without audio
-                const uploadBtn = hasAudio ? '' : `<a href="https://coda.io/form/_deegJpdfVC5" target="_blank" class="upload-btn" onclick="event.stopPropagation();" title="לייג צו רעקאָרדינג">+ לייג צו</a>`;
+                const uploadBtn = hasAudio ? '' : `<button class="upload-btn" onclick="showUploadModal(${globalIndex}); event.stopPropagation();" title="לייג צו רעקארדינג">+ לייג צו</button>`;
                 
                 return `
                     <li class="song-item ${isActive} ${noAudioClass}" data-index="${globalIndex}" onclick="playSong(${globalIndex})">
@@ -1744,15 +1754,37 @@
 
         document.getElementById('prevBtn').addEventListener('click', () => {
             if (currentSongIndex > 0) {
-                loadSong(currentSongIndex - 1);
-                audioPlayer.play();
+                // Find previous song with audio
+                let prevIndex = currentSongIndex - 1;
+                while (prevIndex >= 0) {
+                    const song = songs[prevIndex];
+                    if (song.audioUrl && song.audioUrl.startsWith('http')) {
+                        loadSong(prevIndex);
+                        audioPlayer.play();
+                        return;
+                    }
+                    prevIndex--;
+                }
+                // If no previous song with audio found, stay on current
+                console.log('No previous song with audio');
             }
         });
 
         document.getElementById('nextBtn').addEventListener('click', () => {
             if (currentSongIndex < songs.length - 1) {
-                loadSong(currentSongIndex + 1);
-                audioPlayer.play();
+                // Find next song with audio
+                let nextIndex = currentSongIndex + 1;
+                while (nextIndex < songs.length) {
+                    const song = songs[nextIndex];
+                    if (song.audioUrl && song.audioUrl.startsWith('http')) {
+                        loadSong(nextIndex);
+                        audioPlayer.play();
+                        return;
+                    }
+                    nextIndex++;
+                }
+                // If no next song with audio found, stay on current
+                console.log('No next song with audio');
             }
         });
 
@@ -1761,8 +1793,19 @@
         
         audioPlayer.addEventListener('ended', () => {
             if (currentSongIndex < songs.length - 1) {
-                loadSong(currentSongIndex + 1);
-                audioPlayer.play();
+                // Find next song with audio
+                let nextIndex = currentSongIndex + 1;
+                while (nextIndex < songs.length) {
+                    const song = songs[nextIndex];
+                    if (song.audioUrl && song.audioUrl.startsWith('http')) {
+                        loadSong(nextIndex);
+                        audioPlayer.play();
+                        return;
+                    }
+                    nextIndex++;
+                }
+                // If no next song with audio found, stop
+                console.log('End of playlist - no more songs with audio');
             }
         });
 
@@ -1851,6 +1894,50 @@
 
         function closeModal() {
             document.getElementById('songModal').style.display = 'none';
+        }
+        
+        function showUploadModal(songIndex) {
+            const song = songs[songIndex];
+            const modal = document.getElementById('songModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = `לייג צו רעקארדינג: ${song.name}`;
+            
+            modalBody.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <p style="font-size: 1.1em; margin-bottom: 20px;">
+                        דו וועסט אפלאודן א רעקארדינג פאר:
+                    </p>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <p style="font-size: 1.2em; font-weight: 700; color: #8e24aa; margin-bottom: 10px;">
+                            ${song.name}
+                        </p>
+                        <button onclick="navigator.clipboard.writeText('${song.name.replace(/'/g, "\\'")}'); this.textContent='✓ געקאפיט!'; setTimeout(() => this.textContent='📋 קאפי ניגון נאמען', 2000)" 
+                                style="background: #8e24aa; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9em; cursor: pointer;">
+                            📋 קאפי ניגון נאמען
+                        </button>
+                    </div>
+                    <div style="text-align: right; color: #495057; margin-bottom: 25px; line-height: 1.6;">
+                        <p style="margin-bottom: 8px;">✍️ שרייב אריין דעם ניגון נאמען אין די פארם</p>
+                        <p style="margin-bottom: 8px;">📤 אפלאוד דעם אודיא פייל</p>
+                        <p style="margin-bottom: 8px;">✅ דרוק Submit</p>
+                        <p style="font-size: 0.9em; color: #6c757d; margin-top: 15px;">
+                            ⏱️ עס קען נעמען עטליכע מינוט ביז עס גייט ארויף אויפן סיסטעם
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 15px; justify-content: center;">
+                        <a href="https://coda.io/form/_deegJpdfVC5" target="_blank" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;">
+                            ✓ עפן פארם
+                        </a>
+                        <button onclick="closeModal()" style="background: #6c757d; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1em; font-weight: 600; cursor: pointer;">
+                            צוריק
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
         }
 
         // Close modal when clicking outside
